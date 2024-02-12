@@ -2,6 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
 
 export default function Poster(props) {
+    const { categories } = props; 
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedProductType, setSelectedProductType] = useState('');
 
@@ -13,17 +14,12 @@ export default function Poster(props) {
         setSelectedProductType(event.target.value);
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Traitez les données ici, par exemple, envoyez-les à votre backend
-        console.log(selectedCategory, selectedProductType);
-    };
 
     return (
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Choisir la catégorie</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Choisir</h2>}
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -36,11 +32,9 @@ export default function Poster(props) {
                                 value={selectedCategory}
                             >
                                 <option value="">Sélectionner une catégorie</option>
-                                <option value="decoration">Décoration</option>
-                                <option value="costumes">Costumes</option>
-                                <option value="regie">Regie</option>
-                                <option value="materiel">Materiel</option>
-                                {/* Ajoutez d'autres options pour les catégories */}
+                                {categories.map(categorie => (
+                                <option key={categorie.id} value={categorie.nom}>{categorie.nom}</option>
+                                  ))}
                             </select>
                             {selectedCategory && (
                                 <div className="mt-4">
@@ -51,8 +45,8 @@ export default function Poster(props) {
                                         value={selectedProductType}
                                     >
                                         <option value="">Sélectionner un type de produit</option>
-                                        {/* Ajoutez les types de produit en fonction de la catégorie sélectionnée */}
-                                        {selectedCategory === 'decoration' && (
+                        
+                                        {selectedCategory === categorie.id && (
                                             <>
                                                 <option value="paints">Feuilles décor</option>
                                                 <option value="floors">Meubles</option>
@@ -89,13 +83,13 @@ export default function Poster(props) {
                                                 <option value="autre">Autres</option>
                                             </>
                                         )}
-                                        {/* Ajoutez des conditions pour d'autres catégories */}
+                                       
                                         </select>
                                     
-                                    {/* Ajoutez des conditions pour d'autres types de produits */}
+                                  
                                     <div className="mt-4">
                                         <button
-                                            onClick={handleSubmit}
+                                         
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                             style={{ marginBottom: '20px' }}
                                         >
