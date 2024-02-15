@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class CategorieController extends Controller
 {
@@ -14,10 +16,14 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        // Récupérer toutes les catégories
-        $categories = Categorie::all(); 
+        // Récupérer toutes les catégories et types produits
+        $categorie = DB::table('categorie')->get();
+        $typeproduit = DB::table('typeproduit')->get();
 
-        return  Inertia::render('Categorie')->with('categories', $categories);
+        return Inertia::render('Categorie')
+        // Passer les données récupérées à la vue
+        ->with('categorie', $categorie)
+        ->with('typeproduit', $typeproduit);
     }
     /**
      * Show the form for creating a new resource.

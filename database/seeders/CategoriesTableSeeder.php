@@ -14,11 +14,7 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->insert([
-            ['nom' => 'DECORATION'],
-            ['nom' => 'COSTUMES'],
-            ['nom' => 'REGIES'],
-            ['nom' => 'MATERIEL'],
-        ]);
+      
+
     }
 }

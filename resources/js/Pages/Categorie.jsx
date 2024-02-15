@@ -2,18 +2,23 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
 
 export default function Poster(props) {
-    const { categories } = props; 
+    const { categorie, typeproduit } = props; 
+
+    // State pour stocker la catégorie sélectionnée
     const [selectedCategory, setSelectedCategory] = useState('');
+    
+    // State pour stocker le type de produit sélectionné
     const [selectedProductType, setSelectedProductType] = useState('');
 
+    // Fonction pour gérer le changement de catégorie
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
     };
 
+    // Fonction pour gérer le changement de type de produit
     const handleProductTypeChange = (event) => {
         setSelectedProductType(event.target.value);
     };
-
 
     return (
         <AuthenticatedLayout
@@ -32,9 +37,9 @@ export default function Poster(props) {
                                 value={selectedCategory}
                             >
                                 <option value="">Sélectionner une catégorie</option>
-                                {categories.map(categorie => (
-                                <option key={categorie.id} value={categorie.nom}>{categorie.nom}</option>
-                                  ))}
+                                {categorie.map(categorie => (
+                                    <option key={categorie.id} value={categorie.id}>{categorie.libelle}</option>
+                                ))}
                             </select>
                             {selectedCategory && (
                                 <div className="mt-4">
@@ -45,60 +50,22 @@ export default function Poster(props) {
                                         value={selectedProductType}
                                     >
                                         <option value="">Sélectionner un type de produit</option>
-                        
-                                        {selectedCategory === categorie.id && (
-                                            <>
-                                                <option value="paints">Feuilles décor</option>
-                                                <option value="floors">Meubles</option>
-                                                <option value="sols">Sols</option>
-                                                <option value="matières brut">Matières bruts</option>
-                                                <option value="panneaux d'aggloméré">Panneaux d'aggloméré</option>
-                                                <option value="autres">Autres</option>
-                                            </>
-                                        )}
-                                        {selectedCategory === 'costumes' && (
-                                            <>
-                                                <option value="vetement">Vêtements</option>
-                                                <option value="chaussure">Chaussures</option>
-                                                <option value="textiles">Textiles</option>
-                                            </>
-                                        )}
-                                        {selectedCategory === 'regie' && (
-                                            <>
-                                                <option value="roulante">Roulante</option>
-                                                <option value="electromenager">Electromenager</option>
-                                                <option value="protection">Protection</option>
-                                                <option value="loges">Loges</option>
-                                                <option value="adhesif">Adhesif</option>
-                                                <option value="autremateriel">Autre matériel de tournage</option>
-                                            </>
-                                        )}
-                                        {selectedCategory === 'materiel' && (
-                                            <>
-                                                <option value="camera">Camera</option>
-                                                <option value="machinerie">Machinerie</option>
-                                                <option value="son">Son</option>
-                                                <option value="sfx">SFX</option>
-                                                <option value="electricite">Electricité</option>
-                                                <option value="autre">Autres</option>
-                                            </>
-                                        )}
-                                       
-                                        </select>
-                                    
-                                  
-                                    <div className="mt-4">
-                                        <button
-                                         
-                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                            style={{ marginBottom: '20px' }}
-                                        >
-                                            Valider
-                                        </button>
-                                    </div>
+                                        {/* Lister les produits + ternaire qui vérifie qu'il s'agit bien de l'id de selectedCategiry */}
+                                        {typeproduit.map(produit => (
+                                            produit.idCategorie === parseInt(selectedCategory) ? (
+                                            <option key={produit.id} value={produit.libelle}>{produit.libelle}</option> ) : null
+                                        ))}
+                                    </select>
                                 </div>
-                                
                             )}
+                            <div className="mt-4">
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    style={{ marginBottom: '20px' }}
+                                >
+                                    Valider
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,5 +73,3 @@ export default function Poster(props) {
         </AuthenticatedLayout>
     );
 }
-
-
