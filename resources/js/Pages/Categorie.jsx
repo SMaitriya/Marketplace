@@ -1,8 +1,25 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
 
+export function formulaire(data) {
+    const { prix } = data;
+
+    return (
+        <form>
+            <p>Prix : {prix}</p>
+            {/* Autres champs de formulaire */}
+            <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit"
+            >
+                Soumettre
+            </button>
+        </form>
+    );
+}
+
 export default function Poster(props) {
-    const { categorie, typeproduit } = props; 
+    const { categorie, typeproduit, offre } = props; 
 
     // State pour stocker la catégorie sélectionnée
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -58,14 +75,11 @@ export default function Poster(props) {
                                     </select>
                                 </div>
                             )}
-                            <div className="mt-4">
-                                <button
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                    style={{ marginBottom: '20px' }}
-                                >
-                                    Valider
-                                </button>
-                            </div>
+                            {selectedProductType && offre && (
+                                <div className="mt-4">
+                                    {formulaire({ prix: offre.prix })}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

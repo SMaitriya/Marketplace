@@ -19,11 +19,15 @@ class CategorieController extends Controller
         // Récupérer toutes les catégories et types produits
         $categorie = DB::table('categorie')->get();
         $typeproduit = DB::table('typeproduit')->get();
+        $offre = DB::table('offre')->get();
+        $proprietepropre = DB::table('proprietepropre')->get();
 
         return Inertia::render('Categorie')
         // Passer les données récupérées à la vue
         ->with('categorie', $categorie)
-        ->with('typeproduit', $typeproduit);
+        ->with('typeproduit', $typeproduit)
+        ->with('offre', $offre)
+        ->with('proppropre', $proprietepropre);
     }
     /**
      * Show the form for creating a new resource.
@@ -32,7 +36,8 @@ class CategorieController extends Controller
      */
     public function create()
     {
-        //
+        
+
     }
 
     /**
