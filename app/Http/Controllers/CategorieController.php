@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
+
+
 class CategorieController extends Controller
 {
     /**
@@ -21,13 +23,22 @@ class CategorieController extends Controller
         $typeproduit = DB::table('typeproduit')->get();
         $offre = DB::table('offre')->get();
         $proprietepropre = DB::table('proprietepropre')->get();
+        $ligneproprietepropre = DB::table('ligneproprietepropre')->get();
+        $colonnesOffre = DB::getSchemaBuilder()->getColumnListing('offre'); // Récupérer la liste des colonnes de la table offre
+        
+        
+
+     
 
         return Inertia::render('Categorie')
         // Passer les données récupérées à la vue
         ->with('categorie', $categorie)
         ->with('typeproduit', $typeproduit)
         ->with('offre', $offre)
-        ->with('proppropre', $proprietepropre);
+        ->with('colonnesOffre', $colonnesOffre)
+        ->with('ligneproprietepropre', $ligneproprietepropre)
+        ->with('proprietepropre', $proprietepropre);
+
     }
     /**
      * Show the form for creating a new resource.

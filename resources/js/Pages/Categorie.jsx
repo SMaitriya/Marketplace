@@ -1,38 +1,107 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
 
-export function formulaire(data) {
-    const { prix } = data;
+export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, selectedProductType }) {
+    // Index des colonnes
+    const prix = 6;
+    const description = 2;
+    const dispo = 1;
 
+    
+
+   // Filtrer les lignes de la table ligneproprietepropre pour obtenir celles qui correspondent à un certain critère (creation nouveau tableau)
+const lignesFiltrees = ligneproprietepropre.filter(ligne => ligne.idTypeProduit === parseInt(selectedProductType));
+
+
+
+
+
+// Filtrer les propriétés propres en fonction des lignes filtrées / some est un boolen
+const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.some(ligne => ligne.idProprietePropre === prop.id));
+
+
+    // Affichage du formulaire avec les propriétés propres filtrées
     return (
-        <form>
-            <p>Prix : {prix}</p>
-            {/* Autres champs de formulaire */}
-            <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-            >
-                Soumettre
-            </button>
-        </form>
+        
+            <div className="bg-white p-6 rounded shadow border border-blue-500">
+                <h2 className="text-blue-500 text-5xl font-bold mb-4 text-center">Publication</h2>
+
+
+
+                <div>
+            {proprietePropresFiltrees.length > 0 && (
+                <>
+                    {proprietePropresFiltrees.map(propriete => (
+                        <div key={propriete.id}>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">{propriete.libelle} :</label>
+                            <input
+                                type="text"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                placeholder={propriete.libelle}
+                            />
+                        </div>
+                    ))}
+                </>
+            )}
+                {/* Champ pour la photo */}
+                <label className="block text-gray-700 text-sm font-bold mb-2">Photo :</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+    
+                {/* Champ pour le prix */}
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">{colonnes[prix]} :</label>
+                    <input
+                        type="number"
+                        accept=".jpg, .jpeg, .png"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder={colonnes[prix]}
+                    />
+                </div>
+    
+                {/* Champ pour la description */}
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">{colonnes[description]} :</label>
+                    <textarea
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder={colonnes[description]}
+                    ></textarea>
+                </div>
+    
+                {/* Champ pour la disponibilité */}
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">{colonnes[dispo]} :</label>
+                    <input
+                        type="date"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder={colonnes[dispo]}
+                    />
+                </div>
+    
+                {/* Bouton Soumettre */}
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit"
+                >
+                    Soumettre
+                </button>
+            </div>
+        </div>
     );
 }
-
 export default function Poster(props) {
-    const { categorie, typeproduit, offre } = props; 
+    const { categorie, typeproduit, colonnesOffre, ligneproprietepropre, proprietepropre } = props;
 
-    // State pour stocker la catégorie sélectionnée
     const [selectedCategory, setSelectedCategory] = useState('');
-    
-    // State pour stocker le type de produit sélectionné
     const [selectedProductType, setSelectedProductType] = useState('');
 
-    // Fonction pour gérer le changement de catégorie
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
     };
 
-    // Fonction pour gérer le changement de type de produit
     const handleProductTypeChange = (event) => {
         setSelectedProductType(event.target.value);
     };
@@ -67,23 +136,24 @@ export default function Poster(props) {
                                         value={selectedProductType}
                                     >
                                         <option value="">Sélectionner un type de produit</option>
-                                        {/* Lister les produits + ternaire qui vérifie qu'il s'agit bien de l'id de selectedCategiry */}
                                         {typeproduit.map(produit => (
                                             produit.idCategorie === parseInt(selectedCategory) ? (
-                                            <option key={produit.id} value={produit.libelle}>{produit.libelle}</option> ) : null
+                                                <option key={produit.id} value={produit.id}>{produit.libelle}</option>
+                                            ) : null
                                         ))}
                                     </select>
-                                </div>
-                            )}
-                            {selectedProductType && offre && (
-                                <div className="mt-4">
-                                    {formulaire({ prix: offre.prix })}
                                 </div>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
+            <hr className="my-2 border-white-800" />
+            {selectedProductType && (
+                <div className="max-w-md mx-auto">
+<Formulaire colonnes={colonnesOffre} proprietepropre={proprietepropre} ligneproprietepropre={ligneproprietepropre} selectedProductType={selectedProductType} />
+                </div>
+            )}
         </AuthenticatedLayout>
     );
 }
