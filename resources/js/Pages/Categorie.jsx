@@ -14,26 +14,70 @@ const lignesFiltrees = ligneproprietepropre.filter(ligne => ligne.idTypeProduit 
 
 
 
-
-
 // Filtrer les propriétés propres en fonction des lignes filtrées / some est un boolen
 const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.some(ligne => ligne.idProprietePropre === prop.id));
 
 
-    // Affichage du formulaire avec les propriétés propres filtrées
-    return (
-        
-            <div className="bg-white p-6 rounded shadow border border-blue-500">
-                <h2 className="text-blue-500 text-5xl font-bold mb-4 text-center">Publication</h2>
+
+ // Affichage du formulaire avec les propriétés propres filtrées
+ return (
+     <div className="bg-white p-6 rounded shadow border border-blue-500">
+         <h2 className="text-blue-500 text-5xl font-bold mb-4 text-center">Publication</h2>
+
+         {/* Si il s'agit du produit "sols"*/}
+         <div>
+             {parseInt(selectedProductType) === 5 && (
+                <>
+                {/* On affiche sur le champs de l'index 1 une description et pas dans l'autre*/}
+               {proprietePropresFiltrees.map((propriete, index) => (
+                    <div key={propriete.id}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">{index === 1 ? `${propriete.libelle} (Lino, Moquette ou Parquets)` : propriete.libelle} :</label>
+                        <input
+                            type="text"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder={propriete.libelle}
+                        />
+                    </div>
+                ))}
+            </>
+        )}
+
+         {/* Si il s'agit du produit "feuille de décor"*/}
+         {parseInt(selectedProductType) === 3 && (
+    <>
+        {/* On affiche sur le champ de l'index 3 une description différente */}
+        {proprietePropresFiltrees.map((propriete, index) => (
+            <div key={propriete.id}>
+                <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">
+                    {index === 3 ? (
+                        <span>
+                            {propriete.libelle} 
+                            <span style={{ fontStyle: 'italic' }}> (Toilé + peinture, Papier-peint, Béton, Fausses briques en polystyrène)</span>
+                        </span>
+                    ) : (
+                        propriete.libelle
+                    )}
+                    :
+                </label>
+                <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder={propriete.libelle}
+                />
+            </div>
+        ))}
+    </>
+)}
 
 
 
-                <div>
-            {proprietePropresFiltrees.length > 0 && (
+
+            {/* Si le tableau propretePropreFIltree a un element et si cela ne s'agit pas de l'id 5 qui est "sols"*/}
+            {proprietePropresFiltrees.length > 0 && parseInt(selectedProductType)  !== 5 && parseInt(selectedProductType)  !== 3 &&(
                 <>
                     {proprietePropresFiltrees.map(propriete => (
                         <div key={propriete.id}>
-                            <label className="block text-gray-700 text-sm font-bold mb-2">{propriete.libelle} :</label>
+                            <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">{propriete.libelle} :</label>          
                             <input
                                 type="text"
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -43,13 +87,16 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                     ))}
                 </>
             )}
+               
                 {/* Champ pour la photo */}
+                <div className="mb-4 mt-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Photo :</label>
                 <input
                     type="file"
                     accept="image/*"
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
+                </div>
     
                 {/* Champ pour le prix */}
                 <div className="mb-4">
@@ -154,6 +201,12 @@ export default function Poster(props) {
 <Formulaire colonnes={colonnesOffre} proprietepropre={proprietepropre} ligneproprietepropre={ligneproprietepropre} selectedProductType={selectedProductType} />
                 </div>
             )}
+<div className="mt-6 bg-gray-400 h-10"></div>
+            <div className="mt-10 text-center">Made with love &#10084;</div>
         </AuthenticatedLayout>
+
+      
+
     );
+   
 }
