@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+            $table->engine = 'InnoDB'; // Specify InnoDB storage engine
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
@@ -22,7 +23,9 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
     }
+   
 
     /**
      * Reverse the migrations.

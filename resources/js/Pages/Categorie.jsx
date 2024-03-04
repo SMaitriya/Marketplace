@@ -1,8 +1,41 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
+import { useForm } from '@inertiajs/react';
+
 
 export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, selectedProductType }) {
-    // Index des colonnes
+
+
+    const { data, setData, post, processing, reset, errors} = useForm({
+        prix : '',
+        description : '',
+        image : null,
+        date: '',
+        selectedProductType: selectedProductType,
+
+
+    });
+
+
+    // Ajoutez dynamiquement les propriétés propres à l'objet data
+    proprietepropre.forEach(propriete => {
+        data[propriete.libelle] = ''; // Initialisez toutes les propriétés à une chaîne vide
+    });
+    
+
+    // Envoyer les données data recueilli au controller laravel
+    const submitForm =  (e) => {
+        e.preventDefault();
+        post(route('categorie.store'), data)
+        .then(() => {
+            setSucessMessage('Formulaire envoyé !');
+            reset();
+        })
+    } ;
+
+
+
+    // Index des colonnes pour la vue
     const prix = 6;
     const description = 2;
     const dispo = 1;
@@ -23,9 +56,12 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
  return (
      <div className="bg-white p-6 rounded shadow border border-blue-500">
          <h2 className="text-blue-500 text-5xl font-bold mb-4 text-center">Publication</h2>
+         <form onSubmit={submitForm}>
+      
 
          {/* Si il s'agit du produit "sols"*/}
          <div>
+
              {parseInt(selectedProductType) === 5 && (
                 <>
                 {/* On affiche sur le champs de l'index 1 une description et pas dans l'autre*/}
@@ -34,12 +70,16 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                         <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">{index === 1 ? `${propriete.libelle} (Lino, Moquette ou Parquets)` : propriete.libelle} :</label>
                         <input
                             type="text"
+                            name={propriete.libelle}
+                       
+                            onChange={(e) => setData(propriete.libelle, e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder={propriete.libelle}
                         />
                     </div>
                 ))}
             </>
+        
         )}
 
          {/* Si il s'agit du produit "feuille de décor"*/}
@@ -61,14 +101,20 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                 </label>
                 <input
                     type="text"
+                    name={propriete.libelle}
+              
+                    onChange={(e) => setData(propriete.libelle, e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder={propriete.libelle}
                 />
             </div>
+             
         ))}
-    </>
-)}
+       
 
+    </>
+   
+)}
 
 
 
@@ -80,9 +126,12 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                             <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">{propriete.libelle} :</label>          
                             <input
                                 type="text"
+                                name={propriete.libelle}
+                                onChange={(e) => setData(propriete.libelle, e.target.value)}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 placeholder={propriete.libelle}
                             />
+                             
                         </div>
                     ))}
                 </>
@@ -93,6 +142,8 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                 <label className="block text-gray-700 text-sm font-bold mb-2">Photo :</label>
                 <input
                     type="file"
+                    name="photo"
+                    onChange={(e) => setData('photo', e.target.files[0])} // Utilisez e.target.files pour obtenir les fichiers sélectionnés
                     accept="image/*"
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
@@ -103,7 +154,9 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                     <label className="block text-gray-700 text-sm font-bold mb-2">{colonnes[prix]} :</label>
                     <input
                         type="number"
-                        accept=".jpg, .jpeg, .png"
+                        name="prix"
+                        value= {data.prix}
+                        onChange={(e) => setData('prix', e.target.value)}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder={colonnes[prix]}
                     />
@@ -113,6 +166,9 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">{colonnes[description]} :</label>
                     <textarea
+                        value= {data.description}
+                        onChange={(e) => setData('description', e.target.value)}
+                        name="description"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder={colonnes[description]}
                     ></textarea>
@@ -123,6 +179,9 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                     <label className="block text-gray-700 text-sm font-bold mb-2">{colonnes[dispo]} :</label>
                     <input
                         type="date"
+                        name="date"
+                        value= {data.date}
+                        onChange={(e) => setData('date', e.target.value)}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder={colonnes[dispo]}
                     />
@@ -130,15 +189,17 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
     
                 {/* Bouton Soumettre */}
                 <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="submit"
-                >
-                    Soumettre
-                </button>
-            </div>
-        </div>
-    );
-}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    type="submit"
+>
+    Soumettre
+</button>
+</div>
+</form>
+</div>
+
+
+)};
 export default function Poster(props) {
     const { categorie, typeproduit, colonnesOffre, ligneproprietepropre, proprietepropre } = props;
 
@@ -198,7 +259,7 @@ export default function Poster(props) {
             <hr className="my-2 border-white-800" />
             {selectedProductType && (
                 <div className="max-w-md mx-auto">
-<Formulaire colonnes={colonnesOffre} proprietepropre={proprietepropre} ligneproprietepropre={ligneproprietepropre} selectedProductType={selectedProductType} />
+<Formulaire colonnes={colonnesOffre} proprietepropre={proprietepropre} ligneproprietepropre={ligneproprietepropre} selectedProductType={selectedProductType}  />
                 </div>
             )}
 <div className="mt-6 bg-gray-400 h-10"></div>

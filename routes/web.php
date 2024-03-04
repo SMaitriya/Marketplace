@@ -31,8 +31,16 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/categorie', [CategorieController::class, 'index'])->middleware(['auth', 'verified'])->name('categorie');
 
+
+
+Route::resource('categorie', CategorieController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified'])
+    ->names([
+        'index' => 'categorie.index', // Nom de la route pour l'index
+        'store' => 'categorie.store', // Nom de la route pour le stockage
+    ]);
 
 
 

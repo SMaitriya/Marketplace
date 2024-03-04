@@ -5,6 +5,8 @@ use Inertia\Inertia;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 
 
@@ -27,7 +29,6 @@ class CategorieController extends Controller
         $colonnesOffre = DB::getSchemaBuilder()->getColumnListing('offre'); // Récupérer la liste des colonnes de la table offre
         
         
-
      
 
         return Inertia::render('Categorie')
@@ -47,7 +48,7 @@ class CategorieController extends Controller
      */
     public function create()
     {
-        
+        //
 
     }
 
@@ -57,10 +58,53 @@ class CategorieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+
     public function store(Request $request)
-    {
-        //
+{
+    // Définir les règles de validation pour les champs fixes
+    $request->validate([
+        'prix' =>'required|numeric',
+        'description' => 'required|string|max:100',
+        'date' => 'required|date',
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Insérer les données de l'offre dans la table "offres" et recipère l'ID 
+    $offreID = DB::table('offre')->insertGetId([
+        'prix' => $request->prix,
+        'description' => $request->description,
+        'Date de disponibilité' => $request->date,
+        'date' => now(),
+        'idTypeProduit' => $request->selectedProductType, // Ajoutez selectedProductType à la table offre
+        'Iduser' => Auth::id(), // Utilisez 'Iduser' comme clé pour l'ID de l'utilisateur
+
+    ]);
+
+    $photoPath = $request->file('photo')->storeAs('public/photos', $request->file('photo')->getClientOriginalName());
+
+
+    $photo = DB::table('photo')->insert([
+        'libelle' => $photoPath,
+        'idOffre' => $offreID,
+    ]);
+
+    // Insérer les données des propriétés propres dans la table "propriete_offres"
+    if ($request->has('proprietePropresFiltrees')) {
+        $proprietePropresFiltrees = $request->proprietePropresFiltrees;
+    foreach ($proprietePropresFiltrees as $propriete) {
+        DB::table('proprieteoffre')->insert([
+            'idOffre' => $offreID,
+            'idProprietePropre' => $propriete->id,
+            'valeur' => $request[$propriete->libelle],
+        ]);
     }
+    return redirect()->route('categorie.index')->with('success_message', 'Votre ressource a été créée avec succès !');
+}
+
+    // Redirection ou réponse appropriée après l'enregistrement
+}
 
     /**
      * Display the specified resource.
