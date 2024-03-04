@@ -1,6 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
+
 
 
 export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, selectedProductType }) {
@@ -11,10 +13,17 @@ export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, se
         description : '',
         image : null,
         date: '',
-        selectedProductType: selectedProductType,
+        Typeproduit: selectedProductType,
 
 
     });
+
+        // L'effet est déclenché chaque fois que la valeur de selectedProductType change
+
+    useEffect(() => {
+        setData('Typeproduit', selectedProductType);
+    }, [selectedProductType]
+    );
 
 
     // Ajoutez dynamiquement les propriétés propres à l'objet data

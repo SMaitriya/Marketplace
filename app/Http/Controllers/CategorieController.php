@@ -69,6 +69,7 @@ class CategorieController extends Controller
         'description' => 'required|string|max:100',
         'date' => 'required|date',
         'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+       
     ]);
 
     // Insérer les données de l'offre dans la table "offres" et recipère l'ID 
@@ -77,12 +78,15 @@ class CategorieController extends Controller
         'description' => $request->description,
         'Date de disponibilité' => $request->date,
         'date' => now(),
-        'idTypeProduit' => $request->selectedProductType, // Ajoutez selectedProductType à la table offre
+        'idTypeProduit' => $request->Typeproduit, // Ajoutez selectedProductType à la table offre
         'Iduser' => Auth::id(), // Utilisez 'Iduser' comme clé pour l'ID de l'utilisateur
 
     ]);
 
-    $photoPath = $request->file('photo')->storeAs('public/photos', $request->file('photo')->getClientOriginalName());
+    // iniqid = identifiant unique basé sur la date et l'heure actuelles
+    
+    $photoName = uniqid() . '_' . $request->file('photo')->getClientOriginalName();
+    $photoPath = $request->file('photo')->storeAs('public/photos', $photoName);
 
 
     $photo = DB::table('photo')->insert([
