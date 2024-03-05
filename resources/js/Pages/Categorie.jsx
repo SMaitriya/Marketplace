@@ -14,6 +14,7 @@ export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, se
         image : null,
         date: '',
         Typeproduit: selectedProductType,
+        
 
 
     });
