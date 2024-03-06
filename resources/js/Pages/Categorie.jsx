@@ -14,6 +14,7 @@ export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, se
         image : null,
         date: '',
         Typeproduit: selectedProductType,
+
         
 
 
@@ -27,11 +28,7 @@ export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, se
     );
 
 
-    // Ajoutez dynamiquement les propriétés propres à l'objet data
-    proprietepropre.forEach(propriete => {
-        data[propriete.libelle] = ''; // Initialisez toutes les propriétés à une chaîne vide
-    });
-    
+
 
     // Envoyer les données data recueilli au controller laravel
     const submitForm =  (e) => {
@@ -81,7 +78,7 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                         <input
                             type="text"
                             name={propriete.libelle}
-                       
+                            value={data[propriete.libelle]}
                             onChange={(e) => setData(propriete.libelle, e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder={propriete.libelle}
@@ -112,7 +109,7 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                 <input
                     type="text"
                     name={propriete.libelle}
-              
+                    value={data[propriete.libelle]}
                     onChange={(e) => setData(propriete.libelle, e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder={propriete.libelle}
@@ -136,8 +133,9 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                             <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">{propriete.libelle} :</label>          
                             <input
                                 type="text"
-                                name={propriete.libelle}
-                                onChange={(e) => setData(propriete.libelle, e.target.value)}
+                                name={`propriete_${propriete.id}`} // Utilisez une syntaxe fixe pour le nom du champ avec l'ID de la propriété
+                                value={data[`propriete_${propriete.id}`]} // Utilisez la même syntaxe pour récupérer la valeur
+                                onChange={(e) => setData(`propriete_${propriete.id}`, e.target.value)} // Utilisez la même syntaxe pour définir la valeur
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 placeholder={propriete.libelle}
                             />

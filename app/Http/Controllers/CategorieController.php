@@ -65,13 +65,8 @@ class CategorieController extends Controller
 
 {
 
-    dd($request->all());
+     //dd($request->all());
 
-    // Afficher un champ spécifique du formulaire
-    dd($request->input('nom'));
-
-    // Afficher les fichiers téléchargés
-    dd($request->files->all());
 
     // Définir les règles de validation pour les champs fixes
     $request->validate([
@@ -104,31 +99,25 @@ class CategorieController extends Controller
         'idOffre' => $offreID,
     ]);
 
-     // Vérifie si les données du formulaire contiennent une propriété spécifique
-if ($request->has('{propriete.libelle}')) {
-          
-    // Initialise un tableau pour stocker les données à insérer
-    $insertData = [];
-    
-    // Récupérer les propriétés propres à partir de la requête
-    $proprietes = $request->input('propriete.libelle');
-    
-    // Parcours des propriétés propres pour les traiter une par une
-    foreach ($proprietes as $libelle) {
-        // Stocke les données à insérer dans le tableau $insertData
-        $insertData[] = [
-            'idOffre' => $offreID, // Remplacez $offreID par l'ID approprié de l'offre
-            'idProprietePropre' => $libelle['id'], // Assurez-vous que 'id' est le nom correct du champ ID dans votre modèle de propriété propre
-            'valeur' => $request[$libelle['libelle']]
-        ];
-    }
 
-    // Insérer les données dans la table proprieteoffre
-    DB::table('proprieteoffre')->insert($insertData);
-}
-  // Après avoir traité les données, vous pouvez rediriger l'utilisateur vers une autre page par exemple
-  return redirect()->route('categorie.index');
-}
+ 
+   // Partie pour le stockage des données dans la table proprieteoffre
+   foreach ($request->all() as $key => $value) {
+    // Vérifier si la clé commence par 'propriete_'
+    if (strpos($key, 'propriete_') === 0) {
+        // Extraire l'ID de la propriété de la clé
+        $idPropriete = str_replace('propriete_', '', $key);
+
+        // Insérer les données dans la table proprieteoffre
+        DB::table('proprieteoffre')->insert([
+            'idOffre' => $offreID,
+            'idProprietePropre' => $idPropriete,
+            'valeur' => $value,
+        ]);
+    }
+   }}
+
+
 
 
     /**
