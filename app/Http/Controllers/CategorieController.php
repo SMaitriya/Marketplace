@@ -115,7 +115,9 @@ class CategorieController extends Controller
             'valeur' => $value,
         ]);
     }
-   }}
+   }
+   return redirect()->route('success')->with('success', 'Votre formulaire a été enregistré avec succès !');
+}
 
 
 

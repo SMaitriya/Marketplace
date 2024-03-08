@@ -11,9 +11,9 @@ export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, se
     const { data, setData, post, processing, reset, errors} = useForm({
         prix : '',
         description : '',
-        image : null,
         date: '',
         Typeproduit: selectedProductType,
+
 
         
 
@@ -29,13 +29,15 @@ export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, se
 
 
 
+    
+
+
 
     // Envoyer les données data recueilli au controller laravel
     const submitForm =  (e) => {
         e.preventDefault();
         post(route('categorie.store'), data)
         .then(() => {
-            setSucessMessage('Formulaire envoyé !');
             reset();
         })
     } ;
@@ -77,9 +79,9 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                         <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">{index === 1 ? `${propriete.libelle} (Lino, Moquette ou Parquets)` : propriete.libelle} :</label>
                         <input
                             type="text"
-                            name={propriete.libelle}
-                            value={data[propriete.libelle]}
-                            onChange={(e) => setData(propriete.libelle, e.target.value)}
+                            name={`propriete_${propriete.id}`} 
+                            value={data[`propriete_${propriete.id}`]} 
+                            onChange={(e) => setData(`propriete_${propriete.id}`, e.target.value)} 
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder={propriete.libelle}
                         />
@@ -108,9 +110,9 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                 </label>
                 <input
                     type="text"
-                    name={propriete.libelle}
-                    value={data[propriete.libelle]}
-                    onChange={(e) => setData(propriete.libelle, e.target.value)}
+                    name={`propriete_${propriete.id}`} 
+                    value={data[`propriete_${propriete.id}`]} 
+                    onChange={(e) => setData(`propriete_${propriete.id}`, e.target.value)} 
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder={propriete.libelle}
                 />
@@ -133,9 +135,9 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                             <label className="block text-gray-700 text-sm font-bold mb-2 mt-4">{propriete.libelle} :</label>          
                             <input
                                 type="text"
-                                name={`propriete_${propriete.id}`} // Utilisez une syntaxe fixe pour le nom du champ avec l'ID de la propriété
-                                value={data[`propriete_${propriete.id}`]} // Utilisez la même syntaxe pour récupérer la valeur
-                                onChange={(e) => setData(`propriete_${propriete.id}`, e.target.value)} // Utilisez la même syntaxe pour définir la valeur
+                                name={`propriete_${propriete.id}`} 
+                                value={data[`propriete_${propriete.id}`]} 
+                                onChange={(e) => setData(`propriete_${propriete.id}`, e.target.value)} 
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 placeholder={propriete.libelle}
                             />
@@ -145,17 +147,20 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
                 </>
             )}
                
-                {/* Champ pour la photo */}
-                <div className="mb-4 mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Photo :</label>
-                <input
-                    type="file"
-                    name="photo"
-                    onChange={(e) => setData('photo', e.target.files[0])} // Utilisez e.target.files pour obtenir les fichiers sélectionnés
-                    accept="image/*"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-                </div>
+               <div className="mb-4 mt-4">
+                    <label htmlFor="photo" className="block text-gray-700 text-sm font-bold mb-2">
+                        Photo :
+                    </label>
+                    <input
+        type="file"
+        name="photo"
+        onChange={(e) => setData('photo', e.target.files[0])} // Utilisez e.target.files pour obtenir les fichiers sélectionnés
+        accept="image/*"
+        multiple // Ajoutez l'attribut multiple pour autoriser la sélection de plusieurs fichiers
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+   
+</div>
     
                 {/* Champ pour le prix */}
                 <div className="mb-4">

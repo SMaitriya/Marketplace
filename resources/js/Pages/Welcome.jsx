@@ -1,54 +1,67 @@
+import React from 'react';
 import { Link, Head } from '@inertiajs/react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
+
 
 export default function Welcome(props) {
     return (
         <>
             <Head title="Welcome" />
-            <div className="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
-                    {props.auth.user ? (
-                        <Link
-                            href={route('dashboard')}
-                            className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                        >
-                            Accueil
-                        </Link>
-                    ) : (
-                        <>
-                            <Link
-                                href={route('login')}
-                                className="font-semibold text-gray-600 hover:text-gray-900 dark:text-blue-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                            >
-                                Se connecter
-                            </Link>
 
-                            <Link
-                                href={route('register')}
-                                className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-blue-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                            >
-                                S'inscrire
-                            </Link>
-                        </>
-                    )}
-                </div>
-
-
-
-                        <div className="ml-4 text-center text-6xl text-gray-500 dark:text-blue-400 sm:text-right sm:ml-0">
-                            FIN DE DECHETS
+            {/* Menu en haut */}
+            <header className="bg-white border-b border-gray-100 dark:bg-gray-800 dark:border-gray-600">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <nav className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                                {/* Logo ou titre du site */}
+                                <ApplicationLogo />
+                            </div>
                         </div>
-                   </div>
-                  
-            <style>{`
-                .bg-dots-darker {
-                    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-                }
-                @media (prefers-color-scheme: dark) {
-                    .dark\\:bg-dots-lighter {
-                        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-                    }
-                }
-            `}</style>
+                        <div className="hidden md:block">
+                            {/* Liens de navigation */}
+                            <div className="ml-10 flex items-baseline space-x-4">
+                                <Link
+                                    href={route('dashboard')}
+                                    className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Accueil
+                                </Link>
+                                <Link
+                                    href={route('login')}
+                                    className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Se connecter
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    S'inscrire
+                                </Link>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </header>
+
+            {/* Contenu de la page */}
+            <div className="min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    {/* Contenu de la page (votre contenu de produits) */}
+                    <div className="text-center text-6xl text-gray-500 dark:text-blue-400">
+                        {/* Vous pouvez remplacer cette section par le code qui affiche vos produits */}
+                        FIN DE DECHETS
+                    </div>
+                </div>
+            </div>
+
+            {/* Pied de page */}
+            <footer className="bg-white border-t border-gray-100 dark:bg-gray-800 dark:border-gray-600">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <p className="text-center text-sm text-gray-500 dark:text-gray-400">Made with love &#10084;</p>
+                </div>
+            </footer>
         </>
     );
 }

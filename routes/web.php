@@ -42,6 +42,9 @@ Route::resource('categorie', CategorieController::class)
         'store' => 'categorie.store', // Nom de la route pour le stockage
     ]);
 
+    Route::get('/success', function() {
+        return Inertia::render('Success');
+    })->middleware(['auth', 'verified'])->name('success');
 
 
 Route::middleware('auth')->group(function () {
