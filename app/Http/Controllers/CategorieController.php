@@ -130,9 +130,9 @@ class CategorieController extends Controller
      */
     public function show(Categorie $categorie)
     {
-        //
+        $offres = DB::table('offre')->get(); // Charger les offres depuis la table "offre"
+        return inertia('Welcome')->with('offres', $offres);
     }
-
     /**
      * Show the form for editing the specified resource.
      *

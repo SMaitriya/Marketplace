@@ -2,6 +2,35 @@ import React from 'react';
 import { Link, Head } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
+const Produit = ({ offres }) => {
+
+
+    return (
+        <div>
+           
+            <table className="text-white" >
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Prix</th>
+                        <th>Date de disponibilité</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    {offres.map((offre) => (
+                        <tr key={offre.id} style={{border: '1px solid white'}}>
+                            <td className="text-white">{offre.Description}</td>
+                            <td className="text-white">{offre.Prix}</td>
+                            <td className="text-white">{offre['Date de disponibilité']}</td>
+                           
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
 
 export default function Welcome(props) {
     return (
@@ -48,11 +77,8 @@ export default function Welcome(props) {
             {/* Contenu de la page */}
             <div className="min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    {/* Contenu de la page (votre contenu de produits) */}
-                    <div className="text-center text-6xl text-gray-500 dark:text-blue-400">
-                        {/* Vous pouvez remplacer cette section par le code qui affiche vos produits */}
-                        FIN DE DECHETS
-                    </div>
+                    {/* Afficher les produits en utilisant la fonction Produit */}
+                    <Produit offres={props.offres} />
                 </div>
             </div>
 
