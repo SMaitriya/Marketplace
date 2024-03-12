@@ -3,33 +3,45 @@ import { Link, Head } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
 const Produit = ({ offres }) => {
-
-
     return (
         <div>
-           
-            <table className="text-white" >
+            <table className="text-white">
                 <thead>
                     <tr>
+                        <th>Photo</th>
                         <th>Description</th>
                         <th>Prix</th>
                         <th>Date de disponibilité</th>
                     </tr>
                 </thead>
-                <tbody >
-                    {offres.map((offre) => (
-                        <tr key={offre.id} style={{border: '1px solid white'}}>
-                            <td className="text-white">{offre.Description}</td>
-                            <td className="text-white">{offre.Prix}</td>
-                            <td className="text-white">{offre['Date de disponibilité']}</td>
-                           
-                        </tr>
-                    ))}
+                <tbody>
+                {offres.map((offre) => (
+    <tr key={offre.id}>
+        <td className="text-white">
+            {/* Rendre chaque photo associée au produit */}
+            {offre.photos.map((photo, index) => (
+    <img key={index} src={photo.chemin_photo} alt={`Photo ${index}`} style={{ maxWidth: '100px' }} />
+))}
+        </td>
+        <td className="text-white">{offre.Description}</td>
+        <td className="text-white">{offre.Prix}</td>
+        <td className="text-white">{offre['Date de disponibilité']}</td>
+        <br></br><br></br><br></br><br></br>
+    </tr>
+))}
                 </tbody>
             </table>
         </div>
     );
 };
+
+
+
+
+
+
+
+
 
 
 export default function Welcome(props) {
@@ -78,7 +90,7 @@ export default function Welcome(props) {
             <div className="min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     {/* Afficher les produits en utilisant la fonction Produit */}
-                    <Produit offres={props.offres} />
+                    <Produit offres={props.offres}  />
                 </div>
             </div>
 

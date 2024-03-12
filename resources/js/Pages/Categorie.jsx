@@ -156,7 +156,6 @@ const proprietePropresFiltrees = proprietepropre.filter(prop => lignesFiltrees.s
         name="photo"
         onChange={(e) => setData('photo', e.target.files[0])} // Utilisez e.target.files pour obtenir les fichiers sélectionnés
         accept="image/*"
-        multiple // Ajoutez l'attribut multiple pour autoriser la sélection de plusieurs fichiers
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     />
    

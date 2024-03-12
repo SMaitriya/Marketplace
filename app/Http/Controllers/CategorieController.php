@@ -71,7 +71,7 @@ class CategorieController extends Controller
     // Définir les règles de validation pour les champs fixes
     $request->validate([
         'prix' =>'required|numeric',
-        'description' => 'required|string|max:100',
+        'description' => 'required|string|max:500',
         'date' => 'required|date',
         'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
        
@@ -130,11 +130,33 @@ class CategorieController extends Controller
      */
     public function show(Categorie $categorie)
     {
-        $offres = DB::table('offre')->get(); // Charger les offres depuis la table "offre"
-        return inertia('Welcome')->with('offres', $offres);
+        // Récupérer toutes les offres avec leurs photos associées
+        $offres = DB::table('offre')->get();
+        
+        $photosByOffreId = DB::table('photo')
+            ->join('offre', 'photo.idOffre', '=', 'offre.id')
+            ->select('offre.id as offre_id', 'photo.libelle')
+            ->get()
+            ->groupBy('offre_id');
+    
+        // Ajouter les chemins complets des photos associées à chaque offre
+        foreach ($offres as $offre) {
+            $offre->photos = $photosByOffreId[$offre->id] ?? [];
+            
+            foreach ($offre->photos as $photo) {
+                $photo->chemin_photo = asset('public/photos/' . $photo->libelle);
+            }
+        }
+    
+
+        // Utiliser dd() pour afficher les données passées à la vue
+        //dd($offres);
+    
+        // Passer les données à la vue
+        return inertia('Welcome')
+            ->with('offres', $offres);
     }
-    /**
-     * Show the form for editing the specified resource.
+     /* Show the form for editing the specified resource.
      *
      * @param  \App\Models\Categorie  $categorie
      * @return \Illuminate\Http\Response
