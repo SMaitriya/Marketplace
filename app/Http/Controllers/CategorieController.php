@@ -6,6 +6,8 @@ use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 
 
@@ -132,29 +134,24 @@ class CategorieController extends Controller
     {
         // Récupérer toutes les offres avec leurs photos associées
         $offres = DB::table('offre')->get();
-        
-        $photosByOffreId = DB::table('photo')
-            ->join('offre', 'photo.idOffre', '=', 'offre.id')
-            ->select('offre.id as offre_id', 'photo.libelle')
-            ->get()
-            ->groupBy('offre_id');
     
-        // Ajouter les chemins complets des photos associées à chaque offre
+        // Boucle sur chaque offre pour initialiser la liste des photos
         foreach ($offres as $offre) {
-            $offre->photos = $photosByOffreId[$offre->id] ?? [];
-            
-            foreach ($offre->photos as $photo) {
-                $photo->chemin_photo = asset('public/photos/' . $photo->libelle);
+            $offre->photos = [];
+    
+            // Récupérer les photos associées à chaque offre
+            $photos = DB::table('photo')->where('idOffre', $offre->id)->get();
+    
+            // Ajouter le chemin complet de chaque photo à l'offre
+            foreach ($photos as $photo) {
+                $photo->chemin = asset($photo->libelle);
+                $offre->photos[] = $photo;
             }
         }
     
-
-        // Utiliser dd() pour afficher les données passées à la vue
-        //dd($offres);
-    
         // Passer les données à la vue
-        return inertia('Welcome')
-            ->with('offres', $offres);
+        return Inertia::render('Welcome')->with('offres', $offres);
+       
     }
      /* Show the form for editing the specified resource.
      *

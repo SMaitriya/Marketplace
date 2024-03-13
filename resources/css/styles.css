@@ -1,0 +1,27 @@
+.produit-container {
+    overflow-x: auto;
+}
+
+.produit-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.produit-table th, .produit-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.produit-photo img {
+    max-width: 100px;
+    height: auto;
+}
+
+.produit-description {
+    width: 40%;
+}
+
+.produit-prix, .produit-date {
+    width: 10%;
+}
