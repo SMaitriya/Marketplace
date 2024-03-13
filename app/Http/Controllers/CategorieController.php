@@ -96,8 +96,10 @@ class CategorieController extends Controller
     $photoPath = $request->file('photo')->storeAs('public/photos', $photoName);
 
 
+
+
     $photo = DB::table('photo')->insert([
-        'libelle' => $photoPath,
+        'libelle' => $photoName,
         'idOffre' => $offreID,
     ]);
 
@@ -135,23 +137,36 @@ class CategorieController extends Controller
         // Récupérer toutes les offres avec leurs photos associées
         $offres = DB::table('offre')->get();
     
-        // Boucle sur chaque offre pour initialiser la liste des photos
+        // Boucle sur chaque offre pour récupérer les photos et les propriétés propres
         foreach ($offres as $offre) {
-            $offre->photos = [];
-    
             // Récupérer les photos associées à chaque offre
             $photos = DB::table('photo')->where('idOffre', $offre->id)->get();
     
             // Ajouter le chemin complet de chaque photo à l'offre
             foreach ($photos as $photo) {
-                $photo->chemin = asset($photo->libelle);
-                $offre->photos[] = $photo;
+                $photo->chemin = asset('storage/photos/' . $photo->libelle);
             }
+            $offre->photos = $photos;
+    
+            // Récupérer les propriétés propres associées à chaque offre
+            $proprieteoffres = DB::table('proprieteoffre')->where('idOffre', $offre->id)->get();
+            $proprietePropres = [];
+    
+            // Pour chaque propriété propre associée à l'offre, récupérer la valeur et le libelle de la propriété
+            foreach ($proprieteoffres as $proprieteoffre) {
+                $proprietePropre = DB::table('proprietepropre')->where('id', $proprieteoffre->idProprietePropre)->first();
+                if ($proprietePropre) {
+                    $proprietePropres[] = [
+                        'libelle' => $proprietePropre->libelle,
+                        'valeur' => $proprieteoffre->valeur
+                    ];
+                }
+            }
+            $offre->proprietePropres = $proprietePropres;
         }
     
         // Passer les données à la vue
         return Inertia::render('Welcome')->with('offres', $offres);
-       
     }
      /* Show the form for editing the specified resource.
      *

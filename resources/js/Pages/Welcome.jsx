@@ -9,39 +9,28 @@ import '../../css/styles.css';
 const Produit = ({ offres }) => {
     return (
         <div className="produit-container">
-            <table className="produit-table">
-                <thead>
-                    <tr>
-                        <th>Photo</th>
-                        <th>Description</th>
-                        <th>Prix</th>
-                        <th>Date de disponibilité</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {offres.map((offre) => (
-                        <tr key={offre.id}>
-                            <td className="produit-photo">
-                                {offre.photos.map((photo, index) => (
-                                    <img key={index} src={photo.chemin} alt={`Photo ${index}`} />
-                                    ))}
-                            </td>
-                            <td className="produit-description">{offre.Description}</td>
-                            <td className="produit-prix">{offre.Prix} €</td>
-                            <td className="produit-date">{offre['Date de disponibilité']}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            
-        
-            </div>
-      
+            {offres.map((offre) => (
+                <div key={offre.id} className="produit-card">
+                    <div className="produit-photo">
+                        {offre.photos && offre.photos.map((photo, index) => (
+                            <img key={index} src={photo.chemin} alt={`Photo ${index}`} />
+                        ))}
+                    </div>
+                    <div className="produit-details">
+                        <h2 className="produit-description">{offre.Description}</h2>
+                        <p className="produit-prix">{offre.Prix} €</p>
+                        <p className="produit-date">Date de disponibilité: {offre['Date de disponibilité']}</p>
+                         {/* Parcourir offre.proprietePropre qui contient le libelle de proprietepropre et la valeur de proprieteoffre*/}
+                        {offre.proprietePropres && offre.proprietePropres.map((propriete, index) => (
+                            <p key={index}><strong>{propriete.libelle}:</strong> {propriete.valeur}</p>
+                        ))}
+                        <button className="commander-btn">Commander</button>
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 };
-
-
-
 
 export default function Welcome(props) {
     return (
@@ -65,7 +54,7 @@ export default function Welcome(props) {
                                     href={route('dashboard')}
                                     className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium"
                                 >
-                                    Accueil
+                                    Mon Compte
                                 </Link>
                                 <Link
                                     href={route('login')}
@@ -88,7 +77,9 @@ export default function Welcome(props) {
             {/* Contenu de la page */}
             <div className="min-h-screen bg-dots-darker bg-center bg-white selection:bg-red-500 selection:text-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    {/* Afficher les produits en utilisant la fonction Produit */}
+    <h1 className="text-3xl font-bold text-center mb-8">Tous les produits</h1>
+
+                    
                     <Produit offres={props.offres}  />
                     
                     
