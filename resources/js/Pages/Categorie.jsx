@@ -45,9 +45,9 @@ export function Formulaire({ colonnes, proprietepropre, ligneproprietepropre, se
 
 
     // Index des colonnes pour la vue
-    const prix = 6;
-    const description = 2;
-    const dispo = 1;
+    const prix = 4;
+    const description = 3;
+    const dispo = 5;
 
     
 
